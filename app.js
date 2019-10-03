@@ -36,10 +36,13 @@ app.use(async (req, res, next) => {
 })
 // login route
 app.post('/login', async (req, res) => {
+    let user = await User.login(req.body)
     try {
-        let user = await User.login(req.body)
-        res.cookie('access_token', user.token, { maxAge: configs.cookieExpirationTime, httpOnly: true })
-        delete user.token
+        if (user.status == 200) {
+            res.cookie('access_token', user.token, { maxAge: configs.cookieExpirationTime, httpOnly: true })
+            delete user.token
+        }
+
         res.status(user.status).json(user)
     } catch (error) {
         console.log(error);
