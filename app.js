@@ -4,10 +4,12 @@ const bodyParser = require('body-parser')
 const User = require('./controller/user')
 const mongoose = require('mongoose')
 const configs = require('./configs')
+const cookieParser = require('cookie-parser')
 
 app.use('/users', require('./route/users'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(cookieParser())
 
 // connect mongoose
 app.use(async (req, res, next) => {
@@ -20,14 +22,14 @@ app.use(async (req, res, next) => {
             .catch((error) => {
                 console.log(error);
                 res.status(500).json({
-                    status: false,
+                    error: true,
                     message: 'Database doesn\'t work'
                 })
             })
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            status: false,
+            error: true,
             message: 'Database doesn\'t work'
         })
     }
@@ -35,13 +37,22 @@ app.use(async (req, res, next) => {
 // login route
 app.post('/login', async (req, res) => {
     let user = await User.login(req.body)
-    res.json(user)
+    try {
+        res.cookie('access_token', user.token, { maxAge: configs.cookieExpirationTime, httpOnly: true })
+        delete user.token
+        res.status(user.status).json(user)
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: true,
+            message: 'Cookie error'
+        })
+    }
 })
 // Register route
-app.post('/register',  async(req, res) => {
-    let user =  await User.register(req.body)
+app.post('/register', async (req, res) => {
+    let user = await User.register(req.body)
     res.status(user.status).json(user)
-    
 })
 // Home route
 app.get('/', (req, res) => {
