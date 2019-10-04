@@ -2,6 +2,7 @@ const Jwt = require('./jwt')
 const bcrypt = require('bcrypt')
 const UserModel = require('../models/users')
 const validator = require('validator')
+const formValidator = require('./validator')
 
 // LOGIN
 const login = async (userdata) => {
@@ -39,33 +40,14 @@ const login = async (userdata) => {
 
 // REGISTER
 const register = async (userdata) => {
-  // Are password is compatible?
-  if (userdata.password == '' || userdata.repassword == '' || userdata.username == '' || userdata.email == '') {
-    console.log('Cannot be empty field!');
-    return {
-      status: 500,
-      error: true,
-      message: 'Cannot be empty field!'
-    }
-  }
-  // Are password is compatible?
-  if (userdata.password != userdata.repassword) {
-    console.log('Password don\'t match');
-    return {
-      status: 500,
-      error: true,
-      message: 'Passwords don\'t match'
-    }
-  }
-  // Email validation
-  if (validator.isEmail(userdata.email) == false) {
-    console.log('Email not available!');
-    return {
-      status: 500,
-      error: true,
-      message: 'Email not available!'
-    }
-  }
+  formValidator.form(userdata)
+  .then((data) => {
+   console.log(data);
+   
+  })
+  .catch((err) => {
+    console.log(err);
+  })
 
   const newUser = new UserModel({
     email: userdata.email,
@@ -83,8 +65,8 @@ const register = async (userdata) => {
     }
   } catch (error) {
     // Email in use?
-    if (error.errors.email != undefined) {      
-      console.log('Email in use!');
+    if (error.errors.email != undefined) {
+      console.log(error.errors.email);
       return {
         status: 500,
         error: true,
