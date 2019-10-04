@@ -39,61 +39,58 @@ const login = async (userdata) => {
 
 // REGISTER
 const register = async (userdata) => {
-  let formValidMessage = []
-  if (userdata.password == '' || userdata.repassword == '') {
-    console.log('Cannot be empty password field');
-    formValidMessage.push('Cannot be empty password field')
-  } else if (userdata.password != undefined) {
-    if (userdata.password.length < 6) {
-      console.log('Password must be more than 6 characters');
-      formValidMessage.push('Password must be more than 6 characters')
-    }
-  } 
-  if(userdata.password != userdata.repassword) {
-    console.log('Password don\'t match');
-    formValidMessage.push('Password don\'t match')
-  }
-  
-  if (formValidMessage != '') {
-    return {
-      status: 401,
-      error: true,
-      message: formValidMessage
-    }
-  }
-
   try {
+
+    if (userdata.password == '' || userdata.repassword == '') {
+      throw new Error('Cannot be empty password field')
+    }
+    else if (userdata.password != undefined) {
+      if (userdata.password.length < 6) {
+        throw new Error('Password must be more than 6 characters')
+      }
+    }
+    if (userdata.password != userdata.repassword) {
+      throw new Error('Password don\'t match')
+    }
+
     const newUser = new UserModel({
       email: userdata.email,
       password: bcrypt.hashSync(userdata.password, 10),
       username: userdata.username,
     })
-    // Everythings is OK!
     await newUser.save()
+    // Everythings is OK!
     return {
       status: 200,
       error: false,
       message: 'Signup successful!'
     }
   } catch (error) {
-    let mongoValidMessage = []
-    // Email in use?
+
+   try {
     if (error.errors != undefined) {
+      // Email in errors
       if (error.errors.email != undefined) {
-        console.log(error.errors.email.message);
-        mongoValidMessage.push(error.errors.email.message)
+        throw new Error(error.errors.email.message)
       }
+      // Username in errors
       if (error.errors.username != undefined) {
-        console.log(error.errors.username.message);
-        mongoValidMessage.push(error.errors.username.message)
+        throw new Error(error.errors.username.message)
       }
     }
-    // MongoDB failed during saved!
-    console.log('Doesn\'t save!');
+   } catch (error) {
+     // Mongoose Validation Errors
     return {
       status: 401,
       error: true,
-      message: mongoValidMessage != '' ? mongoValidMessage : 'Doesn\'t save!'
+      message: error.message
+    }
+   }
+   // Form Validation Errors
+    return {
+      status: 401,
+      error: true,
+      message: error.message
     }
   }
 }

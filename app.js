@@ -12,28 +12,18 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 
 // connect mongoose
-app.use(async (req, res, next) => {
-    try {
-        await mongoose.connect(configs.mongodburl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
-            .then(() => {
-                console.log('Mongodb is live!')
-                next()
-            })
-            .catch((error) => {
-                console.log(error);
-                res.status(500).json({
-                    error: true,
-                    message: 'Database doesn\'t work'
-                })
-            })
-    } catch (error) {
+mongoose.connect(configs.mongodburl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
+    .then(() => {
+        console.log('Mongodb is live!')
+    })
+    .catch((error) => {
         console.log(error);
         res.status(500).json({
             error: true,
             message: 'Database doesn\'t work'
         })
-    }
-})
+    })
+
 // login route
 app.post('/login', async (req, res) => {
     let user = await User.login(req.body)
