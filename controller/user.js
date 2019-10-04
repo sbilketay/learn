@@ -40,17 +40,16 @@ const login = async (userdata) => {
 // REGISTER
 const register = async (userdata) => {
   try {
-    if (userdata.password == '' || userdata.repassword == '') {
+    if (userdata.password == '' || userdata.repassword == '')
       throw new Error('Cannot be empty password field')
-    }
-    else if (userdata.password != undefined) {
-      if (userdata.password.length < 6) {
+
+    if (userdata.password != undefined) {
+      if (userdata.password.length < 6)
         throw new Error('Password must be more than 6 characters')
-      }
     }
-    if (userdata.password != userdata.repassword) {
+
+    if (userdata.password != userdata.repassword)
       throw new Error('Password don\'t match')
-    }
 
     const newUser = new UserModel({
       email: userdata.email,
@@ -69,13 +68,11 @@ const register = async (userdata) => {
     try {
       if (error.errors != undefined) {
         // Email in errors
-        if (error.errors.email != undefined) {
+        if (error.errors.email != undefined)
           throw new Error(error.errors.email.message)
-        }
         // Username in errors
-        if (error.errors.username != undefined) {
+        if (error.errors.username != undefined)
           throw new Error(error.errors.username.message)
-        }
       }
     } catch (error) {
       // Mongoose Validation Errors
