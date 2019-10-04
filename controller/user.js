@@ -2,7 +2,6 @@ const Jwt = require('./jwt')
 const bcrypt = require('bcrypt')
 const UserModel = require('../models/users')
 const validator = require('validator')
-const formValidator = require('./validator')
 
 // LOGIN
 const login = async (userdata) => {
@@ -40,15 +39,15 @@ const login = async (userdata) => {
 
 // REGISTER
 const register = async (userdata) => {
-  formValidator.form(userdata)
-  .then((data) => {
-   console.log(data);
-   
-  })
-  .catch((err) => {
-    console.log(err);
-  })
 
+  if (userdata.password != userdata.repassword) {
+    console.log('Password don\'t match');
+    return {
+      status: 401,
+      error: false,
+      message: 'Password don\'t match'
+    }
+  }
   const newUser = new UserModel({
     email: userdata.email,
     password: bcrypt.hashSync(userdata.password, 10),
@@ -64,30 +63,26 @@ const register = async (userdata) => {
       message: 'Signup successful!'
     }
   } catch (error) {
+    let errorMessage = []
     // Email in use?
     if (error.errors.email != undefined) {
-      console.log(error.errors.email);
-      return {
-        status: 500,
-        error: true,
-        message: 'Email in use!'
-      }
+      console.log(error.errors.email.message);
+      errorMessage.push(error.errors.email.message)
     }
-    // Username in use?
     if (error.errors.username != undefined) {
-      console.log('Username in use!');
-      return {
-        status: 500,
-        error: true,
-        message: 'Username in use!'
-      }
+      console.log(error.errors.username.message);
+      errorMessage.push(error.errors.username.message)
+    }
+    if (error.errors.password != undefined) {
+      console.log(error.errors.password.message);
+      errorMessage.push(error.errors.password.message)
     }
     // MongoDB failed during saved!
     console.log('Doesn\'t save!');
     return {
-      status: 500,
+      status: 401,
       error: true,
-      message: 'Doesn\'t save!'
+      message: errorMessage
     }
   }
 }
