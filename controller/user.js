@@ -40,7 +40,6 @@ const login = async (userdata) => {
 // REGISTER
 const register = async (userdata) => {
   try {
-
     if (userdata.password == '' || userdata.repassword == '') {
       throw new Error('Cannot be empty password field')
     }
@@ -67,26 +66,26 @@ const register = async (userdata) => {
     }
   } catch (error) {
 
-   try {
-    if (error.errors != undefined) {
-      // Email in errors
-      if (error.errors.email != undefined) {
-        throw new Error(error.errors.email.message)
+    try {
+      if (error.errors != undefined) {
+        // Email in errors
+        if (error.errors.email != undefined) {
+          throw new Error(error.errors.email.message)
+        }
+        // Username in errors
+        if (error.errors.username != undefined) {
+          throw new Error(error.errors.username.message)
+        }
       }
-      // Username in errors
-      if (error.errors.username != undefined) {
-        throw new Error(error.errors.username.message)
+    } catch (error) {
+      // Mongoose Validation Errors
+      return {
+        status: 401,
+        error: true,
+        message: error.message
       }
     }
-   } catch (error) {
-     // Mongoose Validation Errors
-    return {
-      status: 401,
-      error: true,
-      message: error.message
-    }
-   }
-   // Form Validation Errors
+    // Form Validation Errors
     return {
       status: 401,
       error: true,
