@@ -21,7 +21,8 @@ const usersSchema = new Schema({
         minlength: [4, 'Username must be more than 4 characters'],
     },
     password: {
-        type: String
+        type: String,
+        required: [true, 'Password field is not valid or empty'],
     }
 })
 

@@ -16,7 +16,7 @@ const login = async (userdata) => {
   }
   try {
     let user = await UserModel.findOne({ email: userdata.email })
-    // Password registered?
+    // Password registered
     if (!bcrypt.compareSync(userdata.password, user.password)) throw new Error('Password not registered!')
     let token = await Jwt.create({ userid: user._id })
     // Everythings is OK!
@@ -40,20 +40,9 @@ const login = async (userdata) => {
 // REGISTER
 const register = async (userdata) => {
   try {
-    if (userdata.password == '' || userdata.repassword == '')
-      throw new Error('Cannot be empty password field')
-
-    if (userdata.password != undefined) {
-      if (userdata.password.length < 6)
-        throw new Error('Password must be more than 6 characters')
-    }
-
-    if (userdata.password != userdata.repassword)
-      throw new Error('Password don\'t match')
-
     const newUser = new UserModel({
       email: userdata.email,
-      password: bcrypt.hashSync(userdata.password, 10),
+      password: userdata.password != undefined && userdata.password && userdata.password.length >= 6 ? bcrypt.hashSync(userdata.password, 10) : null,
       username: userdata.username,
     })
     await newUser.save()
@@ -64,7 +53,7 @@ const register = async (userdata) => {
       message: 'Signup successful!'
     }
   } catch (error) {
-
+    // Mongodb error handling
     try {
       if (error.errors != undefined) {
         // Email in errors
@@ -73,20 +62,23 @@ const register = async (userdata) => {
         // Username in errors
         if (error.errors.username != undefined)
           throw new Error(error.errors.username.message)
+        // Password in errors
+        if (error.errors.password != undefined)
+          throw new Error(error.errors.password.message)
       }
     } catch (error) {
-      // Mongoose Validation Errors
+      // Validation Errors
       return {
         status: 401,
         error: true,
         message: error.message
       }
     }
-    // Form Validation Errors
+    // Mongodb Save Error
     return {
       status: 401,
       error: true,
-      message: error.message
+      message: 'Doesn\'t save'
     }
   }
 }
