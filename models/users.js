@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 const emailValidator = require('validator')
 const beautifyUnique = require('mongoose-beautiful-unique-validation');
 
-
 const Schema = mongoose.Schema
 const usersSchema = new Schema({
     email: {
