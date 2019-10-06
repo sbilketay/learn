@@ -12,7 +12,8 @@ const loginSchema = Joi.object({
     'any.required': `Password is required`
   }),
   rememberMe: Joi.number().required().messages({
-    'number.base': 'Remeber Me is required and must be a number'
+    'number.base': 'Remeber Me is required and must be a number',
+    'any.required': `Remeber is required`
   }),
 })
 
