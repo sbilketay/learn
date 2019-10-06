@@ -1,23 +1,24 @@
 const Jwt = require('./jwt')
+const Validation = require('./validation')
 const bcrypt = require('bcrypt')
 const UserModel = require('../models/users')
-const validator = require('validator')
+const Joi = require('@hapi/joi')
+
 
 // LOGIN
 const login = async (userdata) => {
-  // Are the password the same?
-  if (userdata.username == '' || userdata.password == '') {
-    console.log('Fields cannot be empty!');
-    return {
-      status: 401,
-      error: true,
-      message: 'Fields cannot be empty!'
-    }
+  // Form validation
+  const { error } = Validation.loginSchema.validate(userdata)
+  if (error) return {
+    status: 401,
+    error: true,
+    message: error.details[0].message
   }
   try {
+    // Mongodb validation email
     let user = await UserModel.findOne({ email: userdata.email })
-    // Password registered
-    if (!bcrypt.compareSync(userdata.password, user.password)) throw new Error('Password not registered!')
+    // Mongodb validation password
+    if (!bcrypt.compareSync(userdata.password, user.password)) throw new Error() // User password not compare!
     let token = await Jwt.create({ userid: user._id })
     // Everythings is OK!
     return {
@@ -28,7 +29,6 @@ const login = async (userdata) => {
     }
   } catch (error) {
     // Password or email is wrong!
-    console.log(error);
     return {
       status: 401,
       error: true,
@@ -36,7 +36,6 @@ const login = async (userdata) => {
     }
   }
 }
-
 // REGISTER
 const register = async (userdata) => {
   try {
