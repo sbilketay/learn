@@ -11,8 +11,8 @@ const loginSchema = Joi.object({
     'string.empty': `Password cannot be an empty field`,
     'any.required': `Password is required`
   }),
-  rememberMe: Joi.number().required().messages({
-    'number.base': 'Remeber Me is required and must be a number',
+  rememberMe: Joi.boolean().required().messages({
+    'boolean.base': 'Remeber Me is required and must be a true/false',
     'any.required': `Remeber is required`
   }),
 })

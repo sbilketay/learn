@@ -2,15 +2,11 @@ const Jwt = require('./jwt')
 const Validation = require('./validation')
 const bcrypt = require('bcrypt')
 const UserModel = require('../models/users')
-const Joi = require('@hapi/joi')
-
 
 // LOGIN
 const login = async (userdata) => {
   // Form validation
   const { error } = Validation.loginSchema.validate(userdata)
-  console.log(error);
-  
   if (error) return {
     status: 401,
     error: true,
@@ -21,7 +17,7 @@ const login = async (userdata) => {
     let user = await UserModel.findOne({ email: userdata.email })
     // Mongodb validation password
     if (!bcrypt.compareSync(userdata.password, user.password)) throw new Error() // User password not compare!
-    let token = await Jwt.create({ userid: user._id })
+    let token = await Jwt.create({ userid: user._id, remember: userdata.rememberMe })
     // Everythings is OK!
     return {
       status: 200,
