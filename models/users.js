@@ -7,21 +7,21 @@ const usersSchema = new Schema({
     email: {
         type: String,
         unique: 'Email in use',
-        required: [true, 'Cannot be empty email field'],
+        required: [true, 'Email cannot be an empty field'],
         validate: {
             validator: (email) => emailValidator.isEmail(email),
-            message: 'Email invalid'
+            message: 'Email must be a valid email'
         }
     },
     username: {
         type: String,
         unique: 'Username in use',
-        required: [true, 'Cannot be empty username field'],
-        minlength: [4, 'Username must be more than 4 characters'],
+        required: [true, 'Username cannot be an empty field'],
+        minlength: [4, 'Username should have a minimum length of 4'],
     },
     password: {
         type: String,
-        required: [true, 'Password field is not valid or empty'],
+        required: [true, 'Password cannot be an empty field'],
     }
 })
 

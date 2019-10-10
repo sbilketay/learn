@@ -1,7 +1,6 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-const User = require('./controller/user')
 const mongoose = require('mongoose')
 const configs = require('./configs')
 
@@ -20,21 +19,20 @@ mongoose.connect(configs.mongodburl, { useNewUrlParser: true, useUnifiedTopology
         message: 'Database doesn\'t work'
     })
 })
-
 // User Route
 app.use('/user', require('./route/user'))
 // Login Route
 app.post('/login', async (req, res) => {
-    let user = await User.login(req.body)
+    let guest = await Guest.login(req.body)
     try {
-        if (user.status == 200) {
-            res.cookie('access_token', user.token, {
+        if (guest.status == 200) {
+            res.cookie('access_token', guest.token, {
                 maxAge: configs.cookieExpirationTime,
                 httpOnly: true
             })
-            delete user.token
+            delete guest.token
         }
-        res.status(user.status).json(user)
+        res.status(guest.status).json(guest)
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -45,8 +43,8 @@ app.post('/login', async (req, res) => {
 })
 // Register route
 app.post('/register', async (req, res) => {
-    let user = await User.register(req.body)
-    res.status(user.status).json(user)
+    let guest = await Guest.register(req.body)
+    res.status(guest.status).json(guest)
 })
 // Home route
 app.get('/', (req, res) => {
