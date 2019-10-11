@@ -7,6 +7,7 @@ const Main = require('./controller/Main')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(express.static('./public'))
 
 // Connect Mongoose
 mongoose.connect(configs.mongodburl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
@@ -35,7 +36,7 @@ app.post('/login', async (req, res) => {
                 })
             } else {
                 res.cookie('access_token', guest.token, {
-                    maxAge: (configs.cookieExpirationTimeRememberFalse ),
+                    maxAge: (configs.cookieExpirationTimeRememberFalse),
                     httpOnly: true
                 })
             }

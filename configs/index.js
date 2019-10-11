@@ -6,6 +6,7 @@ var config = {
     cookieExpirationTimeRememberFalse: 1000 * 60 * 30, // 30 minute
     tookenExpirationTime: 1000 * 60 * 60 * 24 * 30, // 1 mounth
     secret: "shhh",
+    avatarSizeLimit: 250000, // 250 KB
     mongodburl: 'mongodb://localhost:27017/jwt',
     // mongodburl: 'mongodb://mongo:27017/authmongo' //server
 }

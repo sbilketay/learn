@@ -1,5 +1,5 @@
-const Jwt = require('./jwt')
-const Validation = require('./validation')
+const Jwt = require('./libs/jwt')
+const Validation = require('./libs/validation')
 const bcrypt = require('bcrypt')
 const UserModel = require('../models/users')
 
