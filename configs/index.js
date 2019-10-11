@@ -8,7 +8,7 @@ var config = {
     secret: "shhh",
     avatarSizeLimit: 250000, // 250 KB
     mongodburl: 'mongodb://localhost:27017/jwt',
-    // mongodburl: 'mongodb://mongo:27017/authmongo' //server
+    // mongodburl: 'mongodb://mongo:27017/jwt' //server
 }
 
 module.exports = config
