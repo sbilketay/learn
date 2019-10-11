@@ -4,6 +4,7 @@ const Jwt = require('./libs/jwt')
 const multer = require('multer')
 const path = require('path')
 const pify = require('pify')
+const randomString = require('random-string');
 
 // Avatar upload and display
 const avatar = {
@@ -11,7 +12,7 @@ const avatar = {
         const storage = multer.diskStorage({
             destination: './public/avatars',
             filename: (req, file, cb) => {
-                cb(null, file.fieldname + Date.now() + path.extname(file.originalname))
+                cb(null, randomString({length: 15}) + Date.now() + path.extname(file.originalname))
             }
         })
         // Pify, convert promise for multer.
