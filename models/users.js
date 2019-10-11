@@ -22,7 +22,6 @@ const usersSchema = new Schema({
     password: {
         type: String,
         required: [true, 'Password cannot be an empty field'],
-        select: false
     },
     avatar: {
         type: String,

@@ -40,7 +40,7 @@ router.use(async (req, res, next) => {
 // Main route (/user)
 router.get('/', async (req, res) => {
     try {
-        let user = await UserModel.findOne({ _id: req.user.userid })
+        let user = await UserModel.findOne({ _id: req.user.userid }).select('-password')
         if (!user) throw new Error('User not found ')
         return res.json({
             status: 200,
