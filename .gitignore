@@ -1,6 +1,6 @@
 node_modules/
 public/src/thumbs
-
+public/avatars
 # OS generated files #
 ######################
 .DS_Store
