@@ -11,7 +11,7 @@ router.use(bodyParser.urlencoded({ extended: false }))
 router.use(bodyParser.json())
 router.use(cookieParser())
 
-// Verify Token
+// Verify Token Middleware
 router.use(async (req, res, next) => {
     try {
         let payload = await Jwt.verify(req.cookies.access_token, configs.secret)
@@ -45,9 +45,7 @@ router.get('/', async (req, res) => {
         return res.json({
             status: 200,
             error: false,
-            user_id: user._id,
-            username: user.username,
-            email: user.email,
+            data: user
         })
     } catch (error) {
         return res.json({
