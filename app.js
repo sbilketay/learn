@@ -3,7 +3,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const configs = require('./configs')
-const Guest = require('./controller/guest')
+const Main = require('./controller/Main')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -24,18 +24,18 @@ mongoose.connect(configs.mongodburl, { useNewUrlParser: true, useUnifiedTopology
 app.use('/user', require('./route/user'))
 // Login Route
 app.post('/login', async (req, res) => {
-    let guest = await Guest.login(req.body)
+    let guest = await Main.login(req.body)
     try {
         if (guest.status == 200) {
             // RememberMe check
             if (req.body.rememberMe == 'true') {
                 res.cookie('access_token', guest.token, {
-                    maxAge: configs.cookieExpirationTimeRemeberTrue,
+                    maxAge: configs.cookieExpirationTimeRememberTrue,
                     httpOnly: true
                 })
             } else {
                 res.cookie('access_token', guest.token, {
-                    maxAge: (configs.cookieExpirationTimeRemeberFalse ),
+                    maxAge: (configs.cookieExpirationTimeRememberFalse ),
                     httpOnly: true
                 })
             }
@@ -52,7 +52,7 @@ app.post('/login', async (req, res) => {
 })
 // Register route
 app.post('/register', async (req, res) => {
-    let guest = await Guest.register(req.body)
+    let guest = await Main.register(req.body)
     res.status(guest.status).json(guest)
 })
 // Home route

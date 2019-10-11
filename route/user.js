@@ -17,10 +17,10 @@ router.use(async (req, res, next) => {
         // Payload incorrect or empty throw Error
         if (!payload) throw new Error()
         // If the remember me option is not selected. Extend the cookie time.
-        if (payload.remember == 'false') {
+        if ( !Boolean(Number(payload.remember)) ) {
             let token = await Jwt.create({ userid: payload.userid, remember: payload.remember })
             res.cookie('access_token', token, {
-                maxAge: (configs.cookieExpirationTimeRemeberFalse),
+                maxAge: (configs.cookieExpirationTimeRememberFalse),
                 httpOnly: true
             })
         }

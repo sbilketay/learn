@@ -45,9 +45,9 @@ const register = async (userdata) => {
   }
   try {
     const newUser = new UserModel({
-      username: userdata.username,
-      email: userdata.email,
-      password: bcrypt.hashSync(userdata.password, 10),
+      username: userdata.username.trim().toLowerCase(),
+      email: userdata.email.trim().toLowerCase(),
+      password: bcrypt.hashSync(userdata.password.trim(), 10),
     })
     await newUser.save()
     // Everythings is OK!
@@ -58,6 +58,7 @@ const register = async (userdata) => {
     }
   } catch (error) {
     // Mongodb error handling
+    console.log(error.message);
     try {
       if (error.errors != undefined) {
         // Email in errors
@@ -69,6 +70,7 @@ const register = async (userdata) => {
       }
     } catch (error) {
       // Validation Errors
+      console.log(error.message);
       return {
         status: 401,
         error: true,
@@ -76,6 +78,7 @@ const register = async (userdata) => {
       }
     }
     // Mongodb Save Error
+    console.log(error.message);
     return {
       status: 401,
       error: true,
