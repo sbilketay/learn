@@ -2,6 +2,9 @@ const Jwt = require('./libs/jwt')
 const Validation = require('./libs/validation')
 const bcrypt = require('bcrypt')
 const UserModel = require('../models/users')
+const Mailjet = require('./libs/mailjet')
+const randomVerifyCode = require('random-int');
+
 
 // LOGIN
 const login = async (userdata) => {
@@ -48,8 +51,12 @@ const register = async (userdata) => {
       username: userdata.username.trim().toLowerCase(),
       email: userdata.email.trim().toLowerCase(),
       password: bcrypt.hashSync(userdata.password.trim(), 10),
+      verify_code: randomVerifyCode(1000, 9999)
     })
     await newUser.save()
+    .catch((err) => {
+      console.log(err);
+    })
     // Everythings is OK!
     return {
       status: 200,

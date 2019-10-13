@@ -26,6 +26,19 @@ const usersSchema = new Schema({
     avatar: {
         type: String,
         required: false
+    },
+    status: {
+        code: {
+            type: Number,
+            default: 0,
+        },
+        msg: {
+            type: String,
+            default: 'Waiting for email verify',
+        }
+    },
+    verify_code: {
+        type: Number
     }
 })
 

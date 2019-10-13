@@ -65,4 +65,4 @@ app.get('/', (req, res) => {
 // Server Listening
 app.listen(3000, () => { console.log('Listening 3000') })
 // Error Handling
-app.on('eror', (error) => { console.log(error.message) })
+app.on('eror', (error) => { console.log(error) })

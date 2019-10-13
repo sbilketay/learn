@@ -29,7 +29,7 @@ router.use(async (req, res, next) => {
         next();
     }
     catch (err) {
-        console.log(err);
+        console.log('Error: payload null');
         return res.json({
             status: 401,
             error: true,
@@ -40,7 +40,7 @@ router.use(async (req, res, next) => {
 // Main route (/user)
 router.get('/', async (req, res) => {
     try {
-        let user = await UserModel.findOne({ _id: req.user.userid }).select('-password')
+        let user = await UserModel.findOne({ _id: req.user.userid }).select({"password":0, "_id":0, "verifyMail":0})
         if (!user) throw new Error('User not found ')
         return res.json({
             status: 200,
@@ -55,9 +55,8 @@ router.get('/', async (req, res) => {
         })
     }
 })
-
+// Avatar Upload route
 router.put('/avatar', async (req, res) => {
-
     const file = await User.avatar.upload(req, res)
     res.status(file.status).json(file)
 
