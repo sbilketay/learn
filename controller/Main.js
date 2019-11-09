@@ -54,9 +54,6 @@ const register = async (userdata) => {
       verify_code: randomVerifyCode(1000, 9999)
     })
     await newUser.save()
-    .catch((err) => {
-      console.log(err);
-    })
     // Everythings is OK!
     return {
       status: 200,
