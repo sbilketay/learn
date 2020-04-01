@@ -15,7 +15,7 @@ var config = {
     mailJetApiKey: '185f338a7b978248f0ae84bce534ce13',
     mailJetSecretKey: '15a4649f1a0c968b42d4bc0afc6d9cdd',
     // Mongo Settings
-    mongodburl: 'mongodb://localhost:27017/jwt',
+    mongodburl: process.env.MONGODB_URI || 'mongodb://localhost:27017/jwt',
     // mongodburl: 'mongodb://mongo:27017/jwt' //server
     // The Movie DB api key
     tmdbApiKey: 'd9d6007d1bcf12043db5a085ae3e5bbb',
