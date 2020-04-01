@@ -2,7 +2,7 @@ const databaseHelper = require('../services/helper/database');
 const redisHelper = require('../services/helper/redis');
 const chalk = require('chalk')
 const redis = require('redis');
-const redisClient;
+let redisClient;
 
 if(process.env.REDIS_URL){
     redisClient = redis.createClient(process.env.REDIS_URL);
