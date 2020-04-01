@@ -79,6 +79,6 @@ app.get('/', (req, res) => {
     })
 })
 // Server Listening
-app.listen(configs.port, () => { console.log(chalk.yellowBright.bold.bgGreen('Listening: ' + configs.port)) })
+app.listen(process.env.PORT || configs.port, () => { console.log(chalk.yellowBright.bold.bgGreen('Listening: ' + configs.port)) })
 // Error Handling
 app.on('eror', (error) => { console.log(error) })
