@@ -28,10 +28,10 @@ mongoose.connect(configs.mongodburl, { useNewUrlParser: true, useUnifiedTopology
         })
     })
 
-// // Redis Service Start
-// redisService.init();
-// // Set cache (first 5 record and 1 hours exp time)
-// redisService.initCache(15, 3600);
+// Redis Service Start
+redisService.init();
+// Set cache (first 5 record and 1 hours exp time)
+redisService.initCache(15, 3600);
 
 // User Route
 app.use('/user', require('./route/user'))

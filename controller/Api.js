@@ -4,7 +4,7 @@ const databaseHelper = require('../services/helper/database');
 const flixinfoService = require('../services/flixinfo_api');
 const configs = require('../configs');
 const dbApiService = require('../services/db_api');
-// const redisService = require('../services/redis');
+const redisService = require('../services/redis');
 const chalk = require('chalk');
 
 const searchMediaByNetflixId = async (netflix_id, language) => {
@@ -14,8 +14,7 @@ const searchMediaByNetflixId = async (netflix_id, language) => {
     try {
 
         // 1 - Aranan netflix id sine ait media bilgisi redis cache de varmı
-        // const resultRedisCahce = await redisService.searchRedisCache(netflix_id);
-        const resultRedisCahce = false
+        const resultRedisCahce = await redisService.searchRedisCache(netflix_id);
         if (resultRedisCahce) {
             console.log(chalk.bgYellowBright.black.bold(' Data came from the cache 🏎️  '));
             return {
