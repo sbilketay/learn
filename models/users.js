@@ -39,7 +39,13 @@ const usersSchema = new Schema({
     },
     verify_code: {
         type: Number
-    }
+    },
+    media: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Media'
+        }
+    ]
 })
 
 usersSchema.plugin(beautifyUnique);

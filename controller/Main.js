@@ -19,9 +19,9 @@ const login = async (userdata) => {
     // Find user Mongodb and validation email
     let user = await UserModel.findOne({ email: userdata.email.toLowerCase() })
     // If have a user, the password validate in Mongodb
-    if (!bcrypt.compareSync(userdata.password, user.password)) throw new Error() // User password not compare!
+    if (!bcrypt.compareSync(userdata.password, user.password)) throw new Error() // User password not compare! 
     // Everythings is OK!
-    let token = await Jwt.create({ userid: user._id, remember: userdata.rememberMe })
+    let token = await Jwt.create({ userid: user._id, username: user.username, email: user.email, remember: userdata.rememberMe })
     return {
       status: 200,
       error: false,

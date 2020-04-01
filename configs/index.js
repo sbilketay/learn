@@ -17,6 +17,10 @@ var config = {
     // Mongo Settings
     mongodburl: 'mongodb://localhost:27017/jwt',
     // mongodburl: 'mongodb://mongo:27017/jwt' //server
+    // The Movie DB api key
+    tmdbApiKey: 'd9d6007d1bcf12043db5a085ae3e5bbb',
+    // Flixinfo api default language
+    defaultLanguage: 'en-EN',
 }
 
 module.exports = config
